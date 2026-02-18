@@ -179,8 +179,8 @@ This fork is currently maintained at
 Issues may be brought up here: [[https://github.com/BuiltOnLogic/VobSub2SRT/issues]].
 
 If you have problems with a specific subtitle file then please check if
-it works in mplayer or mpv first.  If it does not then please report the bug to
-mplayer/mpv as well and link to the bug report.
+it works in mplayer first.  If it does not then please report the bug to
+mplayer as well and link to the bug report.
 
 For bug reports please run =vobsub2srt= with the =--verbose= option and copy
 and paste the full output to the bug report.
