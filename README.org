@@ -153,7 +153,7 @@ Please submit bug reports or feature requests to the
 uncomfortable creating one then feel free to send an e-mail to
 <ruediger@c-plusplus.de> instead.
 
-This fork is currently maintained by Christopher Ogloff at
+This fork is currently maintained at
 [[https://github.com/BuiltOnLogic/]] as of February 18, 2026.
 Issues may be brought up here: [[https://github.com/BuiltOnLogic/VobSub2SRT/issues]].
 
