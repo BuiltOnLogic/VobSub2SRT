@@ -1,6 +1,6 @@
+cmake_minimum_required(VERSION 3.16)
 project(vobsub2srt)
 
-cmake_minimum_required(VERSION 2.6.4 FATAL_ERROR)
 
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/CMakeModules)
 
@@ -53,8 +53,8 @@ include(CheckCXXCompilerFlag)
 include(CheckCXXSourceCompiles)
 include(CheckCXXSourceRuns)
 
-set(CMAKE_C_FLAGS "-std=gnu99")
-set(CMAKE_CXX_FLAGS "-ansi -pedantic -Wall -Wextra -Wno-long-long")
+set(CMAKE_C_FLAGS "-std=gnu11")
+set(CMAKE_CXX_FLAGS "-ansi -pedantic -Wall -Wextra -Wno-long-long -std=gnu++11")
 
 set(CMAKE_CXX_FLAGS_RELEASE "-O3 -mtune=native -march=native -DNDEBUG -fomit-frame-pointer -ffast-math") # TODO -Ofast GCC 4.6
 set(CMAKE_C_FLAGS_RELEASE ${CMAKE_CXX_FLAGS_RELEASE})
@@ -117,7 +117,7 @@ execute_process (
 if(EXECUTE_RESULT)
   message(STATUS "dpkg not found: No package generation.")
 else()
-  message(STATUS "Debian architecture: ${CPACK_DEBIAN_PACKAGE_ARCHITECTURE}")
+  message(STATUS "System architecture: ${CPACK_DEBIAN_PACKAGE_ARCHITECTURE}")
   set(CPACK_GENERATOR "DEB")
   set(CPACK_PACKAGE_NAME "${CMAKE_PROJECT_NAME}")
   set(CPACK_PACKAGE_VERSION "${VOBSUB2SRT_VERSION}")
