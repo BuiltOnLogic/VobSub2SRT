@@ -19,9 +19,11 @@
  */
 
 // MPlayer stuff
+extern "C"
 #include "mp_msg.h" // mplayer message framework
 #include "vobsub.h"
 #include "spudec.h"
+}
 
 // Tesseract OCR
 #include "tesseract/baseapi.h"
@@ -29,6 +31,7 @@
 #include <iostream>
 #include <string>
 #include <cstdio>
+#include <climits> //for UINT_MAX
 #include <vector>
 using namespace std;
 
@@ -52,6 +55,7 @@ struct sub_text_t {
  * pts (presentation time stamp) is given with a 90kHz resolution (1/90 ms).
  * srt expects a time stamp as  HH:MM:SS:MSS.
  */
+//TODO: clamp snprintf to 99h to avoid overflow from a inconsistent/malformed PTS
 std::string pts2srt(unsigned pts) {
   unsigned ms = pts/90;
   unsigned const h = ms / (3600 * 1000);
