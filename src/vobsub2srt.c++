@@ -19,7 +19,7 @@
  */
 
 // MPlayer stuff
-extern "C"
+extern "C" {
 #include "mp_msg.h" // mplayer message framework
 #include "vobsub.h"
 #include "spudec.h"
