@@ -18,7 +18,8 @@ files with a text editor or a special subtitle editor.
 * Tested with:
 
 Minimum:
-Debian GNU/Linux 5.0.10 "Squeeze", kernel 2.6.32-5-amd64, GCC 4.4.5, CMake 2.8.2,
+Debian GNU/Linux 5 "Lenny" (fully updated final point release, details slipped my mind)
+Debian GNU/Linux 6.0.10 "Squeeze", kernel 2.6.32-5-amd64, GCC 4.4.5, CMake 2.8.2,
 libtiff4-3.9.45squeeze10, libjpeg62-dev 6b1-1, tesseract-ocr-dev 2.04.2 libleptonica-dev 1.62.1.1+b1
 
 Current:
