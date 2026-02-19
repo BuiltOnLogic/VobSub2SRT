@@ -168,6 +168,9 @@ can use the =--dump-images= flag.
 Use =--help= or read the manpage to get more information about the options of
 vobsub2srt.
 
+* Known Issues
+May return subtitles with timestamps but no text. Under investigation. (2026-02-18)
+
 * Bug reports
 Please submit bug reports or feature requests to the
 [[https://github.com/ruediger/VobSub2SRT/issues][issue tracker on GitHub]].  If you do not have a GitHub account and feel
