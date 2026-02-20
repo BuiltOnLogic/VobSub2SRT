@@ -19,11 +19,11 @@ files with a text editor or a special subtitle editor.
 *legacy*: For compatibility with CMake versions below 4.0
 
 *modern*: CMake version 4.0 drops support for cmake_minimum_required 3.5 or lower.
-          I have tested this with CMake 4.2.3, and it builds regardless.
+          Minimum required adjusted.
 
+**legacy:
 * Tested with:
 
-Minimum:
 - Debian GNU/Linux 5 "Lenny" (fully updated final point release, details slipped my mind)
 - Debian GNU/Linux 6.0.10 "Squeeze"
 - kernel 2.6.32-5-amd64
@@ -35,7 +35,10 @@ Minimum:
 - libleptonica-dev 1.62.1.1+b1
 - tesseract-ocr-eng
 
-Current:
+**modern 
+Builds but does not produce text, in the middle of reworking code)
+Using:
+
 - Arch Linux
 - kernel 6.19-rc7 (amd64, custom tuning)
 - GCC 15.2.1
@@ -45,6 +48,10 @@ Current:
 - tesseract-data-eng 2.4.1.0-4
 - tesseract 5.5.2.1
 - leptonica 1.87.0-1
+
+**inprogress
+(don't expect anything to work here.)
+
 
 
 * Building
@@ -63,7 +70,7 @@ You should also install the tesseract data for the languages you want to use!
  sudo apt-get install tesseract-ocr-deu tesseract-ocr-nor tesseract-ocr-fra
 #+END_EXAMPLE
 
-Note that the support for tesseract below version 2.4 is deprecated and may not work.
+Note that support for tesseract below version 2.4 is deprecated and may not work.
 
 #+BEGIN_EXAMPLE
   ./configure
@@ -93,7 +100,8 @@ running =ldd /usr/lib/liblept.so= (or whatever the path to leptonica is on your
 system). Add those dependencies to =CMakeModules/FindTesseract.cmake=.
 
 ** Ubuntu PPA and .deb packages
-! NOTE: This PPA has not been updated since 2013 !
+*NOTE: This PPA has not been updated since 2013*
+
 I have created a [[https://launchpad.net/~ruediger-c-plusplus/+archive/vobsub2srt][PPA (Personal Package Archive)]] to make installation on
 Ubuntu easy.  Simply add the PPA to your apt-get sources and run an update and
 you can install the =vobsub2srt= package:
@@ -168,9 +176,6 @@ can use the =--dump-images= flag.
 Use =--help= or read the manpage to get more information about the options of
 vobsub2srt.
 
-* Known Issues
-May return subtitles with timestamps but no text. Under investigation. (2026-02-18)
-
 * Bug reports
 Please submit bug reports or feature requests to the
 [[https://github.com/ruediger/VobSub2SRT/issues][issue tracker on GitHub]].  If you do not have a GitHub account and feel
@@ -180,6 +185,7 @@ uncomfortable creating one then feel free to send an e-mail to
 This fork is currently maintained at [[https://github.com/BuiltOnLogic/]].
 Issues may be brought up here: [[https://github.com/BuiltOnLogic/VobSub2SRT/issues]],
 but please note this is a work in progress and subject to change.
+
 
 If you have problems with a specific subtitle file then please check if
 it works in mplayer first.  If it does not then please report the bug to
@@ -205,3 +211,4 @@ Most code is from the MPlayer project.
 - Filirom1 fixed a minor issue (4ed58c2, #49)
 * To Do
 - implement preprocessing (first step scaling. Code available in =spudec.c=)
+
