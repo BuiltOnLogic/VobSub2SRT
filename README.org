@@ -87,7 +87,8 @@ running =ldd /usr/lib/liblept.so= (or whatever the path to leptonica is on your
 system). Add those dependencies to =CMakeModules/FindTesseract.cmake=.
 
 ** Ubuntu PPA and .deb packages
-! NOTE: This PPA has not been updated since 2013 !
+*NOTE: This PPA has not been updated since 2013*
+
 I have created a [[https://launchpad.net/~ruediger-c-plusplus/+archive/vobsub2srt][PPA (Personal Package Archive)]] to make installation on
 Ubuntu easy.  Simply add the PPA to your apt-get sources and run an update and
 you can install the =vobsub2srt= package:
@@ -168,9 +169,9 @@ Please submit bug reports or feature requests to the
 uncomfortable creating one then feel free to send an e-mail to
 <ruediger@c-plusplus.de> instead.
 
-This fork is currently maintained at
-[[https://github.com/BuiltOnLogic/]] as of February 18, 2026.
-Issues may be brought up here: [[https://github.com/BuiltOnLogic/VobSub2SRT/issues]].
+This fork is currently maintained at [[https://github.com/BuiltOnLogic/]].
+Issues may be brought up here: [[https://github.com/BuiltOnLogic/VobSub2SRT/issues]],
+but please note this is a work in progress and subject to change.
 
 If you have problems with a specific subtitle file then please check if
 it works in mplayer or mpv first.  If it does not then please report the bug to
