@@ -57,7 +57,7 @@ int sub_pos = 100; // R: copied from libvo/sub.c
    4: uses swscaler gaussian (this is the only one that looks good) R: Not supported (libswscale dependency removed)
  */
 
-int spu_aamode = 3;
+int spu_aamode = 2;
 int spu_alignment = -1;
 float spu_gaussvar = 1.0;
 

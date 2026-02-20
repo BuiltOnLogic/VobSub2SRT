@@ -38,7 +38,7 @@
 
 int mp_msg_levels[MSGT_MAX]; // verbose level of this module. initialized to -2
 int mp_msg_level_all = MSGL_STATUS;
-int verbose = 0;
+int verbose = 1;
 int mp_msg_color = 0;
 int mp_msg_module = 0;
 #ifdef CONFIG_ICONV
