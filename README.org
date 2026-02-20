@@ -4,7 +4,7 @@ into =.srt= text subtitles by using OCR.  It is based on code from the
 [[http://www.mplayerhq.hu][MPlayer project]] - a really really great movie player.  Some minor parts are
  copied from [[http://ffmpeg.org/][ffmpeg/avutil]] headers. [[http://code.google.com/p/tesseract-ocr/][Tesseract]] is used as OCR software.
 
-Updated 2026-02-18 by Christopher Ogloff
+Maintained by Christopher Ogloff
 
 vobsub2srt is released under the GPL3+ license. The MPlayer code included is
 GPL2+ licensed.
@@ -177,9 +177,9 @@ Please submit bug reports or feature requests to the
 uncomfortable creating one then feel free to send an e-mail to
 <ruediger@c-plusplus.de> instead.
 
-This fork is currently maintained at
-[[https://github.com/BuiltOnLogic/]] as of February 18, 2026.
-Issues may be brought up here: [[https://github.com/BuiltOnLogic/VobSub2SRT/issues]].
+This fork is currently maintained at [[https://github.com/BuiltOnLogic/]].
+Issues may be brought up here: [[https://github.com/BuiltOnLogic/VobSub2SRT/issues]],
+but please note this is a work in progress and subject to change.
 
 If you have problems with a specific subtitle file then please check if
 it works in mplayer first.  If it does not then please report the bug to
