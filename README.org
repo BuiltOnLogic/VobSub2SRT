@@ -24,9 +24,9 @@ files with a text editor or a special subtitle editor.
 *legacy*: For compatibility with CMake versions below 4.0
 
 *modern*: CMake version 4.0 drops support for cmake_minimum_required 3.5 or lower.
-          Minimum required adjusted.
+          Minimum required adjusted to 3.5.
 
-**legacy:
+**legacy: (note: may be broken as well. last time I tested it, it did not work. will come back to this soon.)
 * Tested with:
 
 - Debian GNU/Linux 5 "Lenny" (fully updated final point release, details slipped my mind)
@@ -215,5 +215,5 @@ Most code is from the MPlayer project.
 - James Laird-Wah added min-width/height support and fixed other issues (41c6844, #48, #46)
 - Filirom1 fixed a minor issue (4ed58c2, #49)
 * To Do
-- implement preprocessing (first step scaling. Code available in =spudec.c=)
+- implement preprocessing (first step scaling. Code available in =spudec.c=) (Under investigation@2026-02-24)
 
