@@ -15,6 +15,11 @@ and scaling options to improve the OCR. You can try adjusting --min-width and
 --min-height, or --y-threshold. Otherwise correct mistakes in the =.srt=
 files with a text editor or a special subtitle editor.
 
+*** Current state:
+
+   - Only produces blank image dumps. Cause is known and work is underway.
+
+
 *** Branch notes:
 *legacy*: For compatibility with CMake versions below 4.0
 
@@ -36,7 +41,7 @@ files with a text editor or a special subtitle editor.
 - tesseract-ocr-eng
 
 **modern 
-Builds but does not produce text, in the middle of reworking code)
+Builds but does not produce text, in the middle of reworking code.
 Using:
 
 - Arch Linux
@@ -55,13 +60,13 @@ Using:
 
 
 * Building
-You will need Tesseract, CMake 2.6.0+ and GCC 4.3+ to build it, as well as a few imaging libraries.
+You will need Tesseract, CMake 3.5+ and GCC 4.3+(debatable...) to build it, as well as a few imaging libraries.
 On a Debian-based system you can install the dependencies with:
 
 Note: Substitute libtiff-dev with libtiff4-dev if the package is not found!
 
 #+BEGIN_EXAMPLE
-  sudo apt-get install tesseract-ocr-dev libtiff-dev tesseract-ocr-eng build-essential cmake pkg-config libleptonica-dev
+  sudo apt-get install tesseract-ocr-dev libtiff-dev tesseract-ocr-eng build-essential cmake pkg-config
 #+END_EXAMPLE
 
 You should also install the tesseract data for the languages you want to use!
