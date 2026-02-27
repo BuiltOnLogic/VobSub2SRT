@@ -110,6 +110,7 @@ using namespace tesseract;
 int main(int argc, char **argv) {
   bool dump_images = false;
   bool verb = false;
+  bool debug = false;
   bool list_languages = false;
   std::string ifo_file;
   std::string subname;
@@ -129,7 +130,8 @@ int main(int argc, char **argv) {
     cmd_options opts;
     opts.
       add_option("dump-images", dump_images, "dump subtitles as image files (<subname>-<number>.pgm).").
-      add_option("verbose", verb, "extra verbosity").
+      add_option("verbose", verb, "extra verbosity.").
+      add_option("debug", debug, "debugging information.").
       add_option("ifo", ifo_file, "name of the ifo file. default: tries to open <subname>.ifo. ifo file is optional!").
       add_option("lang", lang, "language to select", 'l').
       add_option("langlist", list_languages, "list languages and exit").
@@ -158,12 +160,13 @@ int main(int argc, char **argv) {
   // Open the sub/idx subtitles
   spu_t spu;
   vob_t vob = vobsub_open(subname.c_str(), ifo_file.empty() ? 0x0 : ifo_file.c_str(), 1, y_threshold, &spu);
+  if(debug) {
   std::cerr << "spu ptr = " << spu << "\n";
+  }
   if(not vob or vobsub_get_indexes_count(vob) == 0) {
     std::cerr << "Couldn't open VobSub files '" << subname << ".idx/.sub'\n";
     return 1;
   } else {
-	  std::cerr << "spu ptr = " << spu << "\n";
 
   // list languages and exit
   if(list_languages) {
@@ -218,7 +221,7 @@ int main(int argc, char **argv) {
   }
 
   // Init Tesseract
-  char const *tess_path = tesseract_data_path.c_str();
+  std::string tess_path = tesseract_data_path.c_str();
   if (!tesseract_data_path.empty()) {
     tess_path = tesseract_data_path.c_str();
   } else {
@@ -269,17 +272,19 @@ int main(int argc, char **argv) {
             /* DEBUG CODE */
       const size_t valid = (size_t)stride * height;
       unsigned minv = 255, maxv	= 0;
+      if(debug) {
       for (size_t j = 0; j < valid; ++j) {
         unsigned v = image[j];
         if(v < minv) minv = v;
         if(v > maxv) maxv = v;
       }
+      
       std::cerr << "range min= " << minv << ", max= " << maxv << ", w= "
                 << width << ", h= " << height << ", stride= " << stride
 		<< ", start_pts= " << start_pts << ", timestamp= "
 		<< timestamp << ", image= " << (const void*)image << "\n";
 	/* END DEBUG CODE */
-
+      }
       // skip this packet if it is another packet of a subtitle that
       // was decoded from multiple mpeg packets.
       if (start_pts == last_start_pts) {
