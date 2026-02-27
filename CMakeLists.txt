@@ -1,4 +1,5 @@
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.5...4.2 FATAL_ERROR)
+cmake_policy(VERSION 3.5...4.2)
 project(vobsub2srt)
 
 
@@ -55,7 +56,8 @@ include(CheckCXXSourceRuns)
 
 set(CMAKE_C_FLAGS "-std=gnu11")
 set(CMAKE_CXX_FLAGS "-ansi -pedantic -Wall -Wextra -Wno-long-long -std=gnu++11")
-
+set(CMAKE_C_STANDARD 11)
+set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_FLAGS_RELEASE "-O3 -mtune=native -march=native -DNDEBUG -fomit-frame-pointer -ffast-math") # TODO -Ofast GCC 4.6
 set(CMAKE_C_FLAGS_RELEASE ${CMAKE_CXX_FLAGS_RELEASE})
 set(CMAKE_CXX_FLAGS_DEBUG "-g3 -DDEBUG")

@@ -15,18 +15,13 @@ and scaling options to improve the OCR. You can try adjusting --min-width and
 --min-height, or --y-threshold. Otherwise correct mistakes in the =.srt=
 files with a text editor or a special subtitle editor.
 
-*** Current state:
-
-   - Only produces blank image dumps. Cause is known and work is underway.
-
-
 *** Branch notes:
 *legacy*: For compatibility with CMake versions below 4.0
 
 *modern*: CMake version 4.0 drops support for cmake_minimum_required 3.5 or lower.
           Minimum required adjusted to 3.5.
 
-**legacy: (note: may be broken as well. last time I tested it, it did not work. will come back to this soon.)
+**legacy:
 * Tested with:
 
 - Debian GNU/Linux 5 "Lenny" (fully updated final point release, details slipped my mind)
@@ -37,11 +32,9 @@ files with a text editor or a special subtitle editor.
 - libtiff4-3.9.45squeeze10
 - libjpeg62-dev 6b1-1
 - tesseract-ocr-dev 2.04.2
-- libleptonica-dev 1.62.1.1+b1
 - tesseract-ocr-eng
 
 **modern 
-Builds but does not produce text, in the middle of reworking code.
 Using:
 
 - Arch Linux
@@ -52,7 +45,6 @@ Using:
 - libjpeg-turbo 3.1.3.1
 - tesseract-data-eng 2.4.1.0-4
 - tesseract 5.5.2.1
-- leptonica 1.87.0-1
 
 **inprogress
 (don't expect anything to work here.)
@@ -60,13 +52,14 @@ Using:
 
 
 * Building
-You will need Tesseract, CMake 3.5+ and GCC 4.3+(debatable...) to build it, as well as a few imaging libraries.
+You will need Tesseract, CMake 2.6.0+ (legacy, CMake 3.5 for master) and
+GCC 4.3+ (legacy, tested with GCC 15.2.1 on master) to build it, as well as a few imaging libraries.
 On a Debian-based system you can install the dependencies with:
 
 Note: Substitute libtiff-dev with libtiff4-dev if the package is not found!
 
 #+BEGIN_EXAMPLE
-  sudo apt-get install tesseract-ocr-dev libtiff-dev tesseract-ocr-eng build-essential cmake pkg-config
+  sudo apt-get install tesseract-ocr-dev libtiff-dev tesseract-ocr-eng build-essential cmake pkg-config libleptonica-dev
 #+END_EXAMPLE
 
 You should also install the tesseract data for the languages you want to use!
@@ -98,6 +91,11 @@ For Debian you need the following extra packages, save binutils-gold for a possi
 #+BEGIN_EXAMPLE
   sudo apt-get install libpng12-dev libwebp-dev libgif-dev zlib1g-dev libjpeg-dev binutils-gold
 #+END_EXAMPLE
+
+If it exits cleanly but produces no text, you may need to specify an IFO file
+(--ifo <IFO-file-path>) and/or a language (--lang <lang>).
+
+Work needs to be done for auto-detection.
 
 If linking fails with undefined references then checking what other dependencies
 your version of leptonica has is a good starting point. You can do this by
@@ -215,5 +213,4 @@ Most code is from the MPlayer project.
 - James Laird-Wah added min-width/height support and fixed other issues (41c6844, #48, #46)
 - Filirom1 fixed a minor issue (4ed58c2, #49)
 * To Do
-- implement preprocessing (first step scaling. Code available in =spudec.c=) (Under investigation@2026-02-24)
-
+- implement preprocessing (first step scaling. Code available in =spudec.c=)
