@@ -14,7 +14,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: install-deps
-      run: apt install tesseract-ocr-dev tesseract-ocr-eng libtiff5-dev libjpeg-dev libpng-dev libwebp-dev
+      run: sudo apt install tesseract-ocr-dev tesseract-ocr-eng libtiff5-dev libjpeg-dev libpng-dev libwebp-dev
     - name: configure
       run: ./configure
     - name: make
