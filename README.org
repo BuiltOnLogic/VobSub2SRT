@@ -16,47 +16,26 @@ and scaling options to improve the OCR. You can try adjusting --min-width and
 files with a text editor or a special subtitle editor.
 
 *** Branch notes:
-*legacy*: For compatibility with CMake versions below 4.0
-
-*modern*: CMake version 4.0 drops support for cmake_minimum_required 3.5 or lower.
-          Minimum required adjusted to 3.5.
-
 **legacy:
-* Tested with:
+This branch will likely get less attention than master. Bugs (or more of them) may be here.
 
 - Debian GNU/Linux 5 "Lenny" (fully updated final point release, details slipped my mind)
 - Debian GNU/Linux 6.0.10 "Squeeze"
-- kernel 2.6.32-5-amd64
-- GCC 4.4.5
-- CMake 2.8.2
-- libtiff4-3.9.45squeeze10
-- libjpeg62-dev 6b1-1
-- tesseract-ocr-dev 2.04.2
-- tesseract-ocr-eng
+- Fedora 40
 
-**modern 
-Using:
+
+**master 
 
 - Arch Linux
-- kernel 6.19-rc7 (amd64, custom tuning)
-- GCC 15.2.1
-- CMake 4.2.3
-- libtiff 4.7.1-1
-- libjpeg-turbo 3.1.3.1
-- tesseract-data-eng 2.4.1.0-4
-- tesseract 5.5.2.1
-
-**inprogress
-(don't expect anything to work here.)
-
-
+- Fedora 38-40 (Fedora 39 requires cmake downgrade to 3.27 if using 3.30)
+- Debian 9-14
 
 * Building
 You will need Tesseract, CMake 2.6.0+ (legacy, CMake 3.5 for master) and
 GCC 4.3+ (legacy, tested with GCC 15.2.1 on master) to build it, as well as a few imaging libraries.
 On a Debian-based system you can install the dependencies with:
 
-Note: Substitute libtiff-dev with libtiff4-dev if the package is not found!
+Note: Substitute libtiff-dev with libtiff4(or 5, etc)-dev if the package is not found!
 
 #+BEGIN_EXAMPLE
   sudo apt-get install tesseract-ocr-dev libtiff-dev tesseract-ocr-eng build-essential cmake pkg-config libleptonica-dev
@@ -78,6 +57,7 @@ Note that support for tesseract below version 2.4 is deprecated and may not work
 
 This should install the program vobsub2srt to =/usr/local/bin=.  You can
 uninstall vobsub2srt with =sudo make uninstall=.
+
 ** Static binary
 I recommend using the dynamic binary! However if you really need a static binary
 you can add the flag =-DBUILD_STATIC=ON= to the =./configure= call.  But be
@@ -92,8 +72,11 @@ For Debian you need the following extra packages, save binutils-gold for a possi
   sudo apt-get install libpng12-dev libwebp-dev libgif-dev zlib1g-dev libjpeg-dev binutils-gold
 #+END_EXAMPLE
 
-If it exits cleanly but produces no text, you may need to specify an IFO file
-(--ifo <IFO-file-path>) and/or a language (--lang <lang>).
+If it exits cleanly but produces no text, you need to specify an IFO file.
+#+BEGIN_EXAMPLE
+vobsub2srt --ifo <IFO-file-path> <subfile-withoutextension>
+#+END_EXAMPLE
+and/or a language (--lang <lang>) if your DVD has undefined language metadata (most are like this).
 
 Work needs to be done for auto-detection.
 
@@ -129,7 +112,7 @@ be installed by using the following commands:
 
 #+BEGIN_EXAMPLE
   brew install --with-all-languages tesseract
-  brew install --HEAD https://github.com/ruediger/VobSub2SRT/raw/master/packaging/vobsub2srt.rb
+  brew install --HEAD https://github.com/BuiltOnLogic/VobSub2SRT/raw/master/packaging/vobsub2srt.rb
 #+END_EXAMPLE
 
 ** Gentoo ebuild
@@ -138,7 +121,7 @@ emerge with the following steps
 
 #+BEGIN_EXAMPLE
   sudo mkdir -p /usr/local/portage/media-video/vobsub2srt/
-  wget https://github.com/ruediger/VobSub2SRT/raw/master/packaging/vobsub2srt-9999.ebuild
+  wget https://github.com/BuiltOnLogic/VobSub2SRT/raw/master/packaging/vobsub2srt-9999.ebuild
   sudo mv vobsub2srt-9999.ebuild /usr/local/portage/media-video/vobsub2srt/
   cd /usr/local/portage/media-video/vobsub2srt/
   sudo ebuild vobsub2srt-999.ebuild digest
@@ -181,24 +164,21 @@ vobsub2srt.
 
 * Bug reports
 Please submit bug reports or feature requests to the
-[[https://github.com/ruediger/VobSub2SRT/issues][issue tracker on GitHub]].  If you do not have a GitHub account and feel
-uncomfortable creating one then feel free to send an e-mail to
-<ruediger@c-plusplus.de> instead.
+[[https://github.com/BuiltOnLogic/VobSub2SRT/issues][issue tracker on GitHub]].
 
 This fork is currently maintained at [[https://github.com/BuiltOnLogic/]].
-Issues may be brought up here: [[https://github.com/BuiltOnLogic/VobSub2SRT/issues]],
-but please note this is a work in progress and subject to change.
 
 
 If you have problems with a specific subtitle file then please check if
-it works in mplayer first.  If it does not then please report the bug to
-mplayer as well and link to the bug report.
+it works in a video player first.
 
-For bug reports please run =vobsub2srt= with the =--verbose= option and copy
-and paste the full output to the bug report.
+For bug reports please run =vobsub2srt= with the =--verbose= and ==--debug==
+option and copy and paste the full output to the bug report.
 
 * Contributors
 Most code is from the MPlayer project.
+- Christopher Ogloff [fixed code and tested working from kernel 2.6 to 7.0
+  on multiple distributions]
 - Armin Häberling <armin.aha@gmail.com> wrote a patch to fix an issue with
   multiple instances of the same subtitle in result file (21af426)
 - James Harris <jimmy@jamesharris.org> wrote the formula for Homebrew (54f311d6)
