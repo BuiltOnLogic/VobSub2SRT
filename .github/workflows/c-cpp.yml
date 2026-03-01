@@ -24,6 +24,6 @@ jobs:
     - name: make
       run: make
     - name: make install
-      run: make install
+      run: sudo make install
     - name: vobsub2srt-runtest
       run: vobsub2srt --help
