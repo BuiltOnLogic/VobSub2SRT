@@ -26,4 +26,4 @@ jobs:
     - name: make install
       run: sudo make install
     - name: vobsub2srt-runtest
-      run: vobsub2srt --help
+      run: vobsub2srt --ifo eng.ifo --verbose eng
