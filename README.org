@@ -72,12 +72,6 @@ For Debian you need the following extra packages, save binutils-gold for a possi
   sudo apt-get install libpng12-dev libwebp-dev libgif-dev zlib1g-dev libjpeg-dev binutils-gold
 #+END_EXAMPLE
 
-If it exits cleanly but produces no text, you need to specify an IFO file.
-#+BEGIN_EXAMPLE
-vobsub2srt --ifo <IFO-file-path> <subfile-withoutextension>
-#+END_EXAMPLE
-and/or a language (--lang <lang>) if your DVD has undefined language metadata (most are like this).
-
 Work needs to be done for auto-detection.
 
 If linking fails with undefined references then checking what other dependencies
@@ -144,6 +138,12 @@ simply call
     Wrote subtitles to 'Filename.srt'
   $
 #+END_EXAMPLE
+
+If it exits cleanly but produces no text, you need to specify an IFO file.
+#+BEGIN_EXAMPLE
+vobsub2srt --ifo <IFO-file-path> Filename
+#+END_EXAMPLE
+and/or a language (=--lang <lang>=) if your DVD has undefined language metadata (most are like this).
 
 with =Filename= being the file name of the subtitle files *WITHOUT* the
 extension (=.idx= / =.sub=). vobsub2srt writes the subtitles to a file called
