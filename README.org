@@ -172,7 +172,7 @@ This fork is currently maintained at [[https://github.com/BuiltOnLogic/]].
 If you have problems with a specific subtitle file then please check if
 it works in a video player first.
 
-For bug reports please run =vobsub2srt= with the =--verbose= and ==--debug==
+For bug reports please run =vobsub2srt= with the =--verbose= and =--debug=
 option and copy and paste the full output to the bug report.
 
 * Contributors
