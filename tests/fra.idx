@@ -1,0 +1,33 @@
+# VobSub index file, v7 (do not modify this line!)
+langidx: 0
+
+id: und, index: 0
+timestamp: 00:00:05:065, filepos: 000000000
+timestamp: 00:00:08:669, filepos: 000000800
+timestamp: 00:00:11:872, filepos: 000001000
+timestamp: 00:00:16:009, filepos: 000001800
+timestamp: 00:00:19:947, filepos: 000002000
+timestamp: 00:00:31:191, filepos: 000002800
+timestamp: 00:00:33:493, filepos: 000003000
+timestamp: 00:00:38:699, filepos: 000004000
+timestamp: 00:00:42:002, filepos: 000005000
+timestamp: 00:00:44:338, filepos: 000005800
+timestamp: 00:00:48:075, filepos: 000006800
+timestamp: 00:00:52:613, filepos: 000007800
+timestamp: 00:00:55:549, filepos: 000008000
+timestamp: 00:00:58:585, filepos: 000008800
+timestamp: 00:01:02:556, filepos: 000009800
+timestamp: 00:01:08:495, filepos: 00000a000
+timestamp: 00:01:14:301, filepos: 00000b000
+timestamp: 00:01:16:370, filepos: 00000b800
+timestamp: 00:01:19:640, filepos: 00000c000
+timestamp: 00:01:21:308, filepos: 00000c800
+timestamp: 00:01:29:016, filepos: 00000d000
+timestamp: 00:01:33:920, filepos: 00000e000
+timestamp: 00:01:37:157, filepos: 00000e800
+timestamp: 00:01:41:461, filepos: 00000f800
+timestamp: 00:01:44:564, filepos: 000010000
+timestamp: 00:01:48:635, filepos: 000011000
+timestamp: 00:01:50:771, filepos: 000011800
+timestamp: 00:01:53:874, filepos: 000012000
+timestamp: 00:01:59:513, filepos: 000012800
