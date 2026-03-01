@@ -149,9 +149,9 @@ with =Filename= being the file name of the subtitle files *WITHOUT* the
 extension (=.idx= / =.sub=). vobsub2srt writes the subtitles to a file called
 =Filename.srt=.
 
-If a subtitle file contains more than one language you can use the =--tesseract-lang=
-parameter to set the correct language (Use =--langlist= to find out about the
-languages in the file).  For some languages you might need to set the tesseract
+If a subtitle file contains more than one language you can use the =--lang= or
+=--index= parameter to set the correct language (Use =--langlist= to find out about
+the languages in the file).  For some languages you might need to set the tesseract
 language yourself (e.g., chi_tra/chi_sim for traditional or simplified chinese
 characters).  You can use =--tesseract-lang= to do this.  In most cases this
 should however be autodetected.
