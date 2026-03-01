@@ -21,13 +21,13 @@ This branch will likely get less attention than master. Bugs (or more of them) m
 
 - Debian GNU/Linux 5 "Lenny" (fully updated final point release, details slipped my mind)
 - Debian GNU/Linux 6.0.10 "Squeeze"
-- Fedora 40 (why it doesn't work with master is beyond me at the moment.)
+- Fedora 33
 
 
 **master 
 
 - Arch Linux
-- Fedora 38-39 (Fedora 39 requires cmake downgrade to 3.27 if using 3.30)
+- Fedora 34-40 (Fedora 39 requires cmake downgrade to 3.27 if using 3.30)
 - Debian 9-14
 
 * Building
@@ -38,7 +38,7 @@ On a Debian-based system you can install the dependencies with:
 Note: Substitute libtiff-dev with libtiff4(or 5, etc)-dev if the package is not found!
 
 #+BEGIN_EXAMPLE
-  sudo apt-get install tesseract-ocr-dev libtiff-dev tesseract-ocr-eng build-essential cmake pkg-config libleptonica-dev
+  sudo apt-get install libtesseract-dev libtiff-dev tesseract-ocr-eng build-essential cmake pkg-config
 #+END_EXAMPLE
 
 You should also install the tesseract data for the languages you want to use!
@@ -66,10 +66,10 @@ static library files for tesseract, libtill, libavutils, and for their
 dependencies as well.  On Ubuntu 12.04 the static libraries are only included in
 the dev packages! You may also need the Gold linker.
 
-For Debian you need the following extra packages, save binutils-gold for a possible edge scenario:
+For Debian you need the following extra packages:
 
 #+BEGIN_EXAMPLE
-  sudo apt-get install libpng12-dev libwebp-dev libgif-dev zlib1g-dev libjpeg-dev binutils-gold
+  sudo apt-get install libpng-dev libwebp-dev zlib1g-dev libjpeg-dev
 #+END_EXAMPLE
 
 Work needs to be done for auto-detection.
@@ -143,13 +143,13 @@ If it exits cleanly but produces no text, you need to specify an IFO file.
 #+BEGIN_EXAMPLE
 vobsub2srt --ifo <IFO-file-path> Filename
 #+END_EXAMPLE
-and/or a language (=--lang <lang>=) if your DVD has undefined language metadata (most are like this).
+and/or a language (=--tesseract-lang <lang>=) if your DVD has undefined language metadata (most are like this).
 
 with =Filename= being the file name of the subtitle files *WITHOUT* the
 extension (=.idx= / =.sub=). vobsub2srt writes the subtitles to a file called
 =Filename.srt=.
 
-If a subtitle file contains more than one language you can use the =--lang=
+If a subtitle file contains more than one language you can use the =--tesseract-lang=
 parameter to set the correct language (Use =--langlist= to find out about the
 languages in the file).  For some languages you might need to set the tesseract
 language yourself (e.g., chi_tra/chi_sim for traditional or simplified chinese
