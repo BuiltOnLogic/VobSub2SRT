@@ -21,13 +21,13 @@ This branch will likely get less attention than master. Bugs (or more of them) m
 
 - Debian GNU/Linux 5 "Lenny" (fully updated final point release, details slipped my mind)
 - Debian GNU/Linux 6.0.10 "Squeeze"
-- Fedora 40
+- Fedora 40 (why it doesn't work with master is beyond me at the moment.)
 
 
 **master 
 
 - Arch Linux
-- Fedora 38-40 (Fedora 39 requires cmake downgrade to 3.27 if using 3.30)
+- Fedora 38-39 (Fedora 39 requires cmake downgrade to 3.27 if using 3.30)
 - Debian 9-14
 
 * Building
