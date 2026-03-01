@@ -67,6 +67,8 @@ std::string pts2srt(unsigned pts) {
   uint32_t s = ms / 1000u;
   ms %= 1000u;
 
+  if(h > 99) h = 99;
+
   std::array<char, 32> buf{};
   std::snprintf(buf.data(), buf.size(), "%02u:%02u:%02u,%03u", h, m, s, ms);
     return buf.data();
@@ -127,8 +129,8 @@ int main(int argc, char **argv) {
     opts.
       add_option("dump-images", dump_images, "dump subtitles as image files (<subname>-<number>.pgm).").
       add_option("verbose", verb, "extra verbosity.").
-      add_option("debug", debug, "debugging information.").
-      add_option("ifo", ifo_file, "name of the ifo file. default: tries to open <subname>.ifo. ifo file is optional!").
+      add_option("debug", debug, "\tdebugging information.").
+      add_option("ifo", ifo_file, "name of the ifo file. default: tries to open <subname>.ifo.\n\t\t\tifo file is required in most, if not all cases!").
       add_option("lang", lang, "language to select", 'l').
       add_option("langlist", list_languages, "list languages and exit").
       add_option("index", index, "subtitle index", 'i').
@@ -140,8 +142,7 @@ int main(int argc, char **argv) {
       add_option("min-height", min_height, "Minimum height in pixels to consider a subpicture for OCR (Default: 1)").
       add_unnamed(subname, "subname", "name of the subtitle files WITHOUT .idx/.sub ending! (REQUIRED)");
     if(not opts.parse_cmd(argc, argv) or subname.empty()) {
-		std::cout << "Please provide a subtitle to convert, and consult --help.\n";
-      return 0;
+      return 1;
     }
   }
 
@@ -184,7 +185,7 @@ int main(int argc, char **argv) {
 
   // default english
   char const *tess_lang = tess_lang_user.empty() ? "eng" : tess_lang_user.c_str();
-  if(not lang.empty()) {
+  if(!lang.empty()) {
     if(vobsub_set_from_lang(vob, lang.c_str()) < 0) {
       std::cerr << "No matching language for '" << lang << "' found! (Trying to use default)\n";
     }
