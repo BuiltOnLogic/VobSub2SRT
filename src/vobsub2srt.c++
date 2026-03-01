@@ -45,10 +45,10 @@ typedef void* spu_t;
 
 // helper struct for caching and fixing end_pts in some cases
 struct sub_text_t {
-  sub_text_t(unsigned start_pts, unsigned end_pts, char const *text)
+  sub_text_t(uint32_t start_pts, uint32_t end_pts, char const *text)
     : start_pts(start_pts), end_pts(end_pts), text(text)
   { }
-  unsigned start_pts, end_pts;
+  uint32_t start_pts, end_pts;
   char const *text;
 };
 
@@ -59,12 +59,12 @@ struct sub_text_t {
  */
 
 std::string pts2srt(unsigned pts) {
-  unsigned ms = pts/90u;
-  unsigned h = ms / (3600u * 1000u);
+  uint32_t ms = pts/90u;
+  uint32_t h = ms / (3600u * 1000u);
   ms -= h * 3600 * 1000;
-  unsigned m = ms / (60u * 1000u);
+  uint32_t m = ms / (60u * 1000u);
   ms -= m * 60u * 1000u;
-  unsigned s = ms / 1000u;
+  uint32_t s = ms / 1000u;
   ms %= 1000u;
 
   std::array<char, 32> buf{};
@@ -73,13 +73,13 @@ std::string pts2srt(unsigned pts) {
 }
 
 /// Dumps the image data to <subtitlename>-<subtitleid>.pgm in Netbpm PGM format
-void dump_pgm(std::string const &filename, unsigned counter, unsigned width, unsigned height,
-              unsigned stride, unsigned char const *image, size_t image_size) {
+void dump_pgm(std::string const &filename, uint32_t counter, uint32_t width, uint32_t height,
+              uint32_t stride, unsigned char const *image, size_t image_size) {
   (void)image_size;
 
   char buf[500];
   ::snprintf(buf, sizeof(buf), "%s-%04u.pgm", filename.c_str(), counter);
-  FILE *pgm = ::fopen(buf, "wb");
+  FILE *pgm = std::fopen(buf, "wb");
   if(!pgm) {
     std::cerr << "Image decode failure. Count: " << counter << "\n";
     return;
@@ -89,11 +89,11 @@ void dump_pgm(std::string const &filename, unsigned counter, unsigned width, uns
       ::fclose(pgm);
       return;
     } else {
-      ::fprintf(pgm, "P5\n%u %u %u\n", width, height, 255u);
+      std::fprintf(pgm, "P5\n%u %u %u\n", width, height, 255u);
     for(unsigned i = 0; i < height; ++i) {
-      ::fwrite(image + (size_t)i * stride, 1, width, pgm);
+      std::fwrite(image + (size_t)i * stride, 1, width, pgm);
     }
-    ::fclose(pgm);
+    std::fclose(pgm);
   }
 }
 }
@@ -153,11 +153,6 @@ int main(int argc, char **argv) {
     std::cout << "Using Y palette threshold: " << y_threshold << "\n";
   }
 
-  // Warn if no ifo file supplied
-  if(ifo_file.empty()) {
-    std::cout << "WARNING: No .ifo file supplied. Text/image dump may be blank.\n";
-  }
-
   // Open the sub/idx subtitles
   spu_t spu;
   vob_t vob = vobsub_open(subname.c_str(), ifo_file.empty() ? 0x0 : ifo_file.c_str(), 1, y_threshold, &spu);
@@ -203,7 +198,7 @@ int main(int argc, char **argv) {
   else {
     if(index >= 0) {
       if(static_cast<unsigned>(index) >= vobsub_get_indexes_count(vob)) {
-        cerr << "Index argument out of range: " << index << " ("
+	std::cerr << "Index argument out of range: " << index << " ("
              << vobsub_get_indexes_count(vob) << ")\n";
         return 1;
       }
@@ -227,28 +222,24 @@ int main(int argc, char **argv) {
     tess_path = tesseract_data_path.c_str();
   }
 
-//#ifdef CONFIG_TESSERACT_NAMESPACE
 	tesseract::TessBaseAPI *tess_base_api = new tesseract::TessBaseAPI();
 
   if(tess_base_api->Init(NULL, tess_lang)) {
     std::cerr << "Failed to initialize tesseract (OCR).\n";
     return 1;
   } else {
-  /*if(not blacklist.empty()) {
-    tess_base_api.SetVariable("tessedit_char_blacklist", blacklist.c_str());
   
-#else
-  tess_base_api->SimpleInit(tess_path, tess_lang, false); // TODO params
-  if(not blacklist.empty()) {
+//  tess_base_api->Init(tess_path, tess_lang, false); // TODO params
+  if(!blacklist.empty()) {
     tess_base_api->SetVariable("tessedit_char_blacklist", blacklist.c_str());
   }
-#endif
-*/
+
+
   // Open srt output file
   string const srt_filename = subname + ".srt";
-  FILE *srtout = fopen(srt_filename.c_str(), "w");
-  if(not srtout) {
-    perror("could not open .srt file");
+  FILE *srtout = std::fopen(srt_filename.c_str(), "w");
+  if(!srtout) {
+    std::cerr << "Could not open .srt file\n";
     return 1;
   }
 
@@ -266,16 +257,17 @@ int main(int argc, char **argv) {
       spudec_heartbeat(spu, timestamp);
       unsigned char const *image;
       size_t image_size;
-      unsigned width, height, stride, start_pts, end_pts;
+      uint32_t width, height, stride, start_pts, end_pts;
       spudec_get_data(spu, &image, &image_size, &width, &height, &stride, &start_pts, &end_pts);
       const size_t valid = (size_t)stride * height;
-      unsigned minv = 255, maxv	= 0;
+      uint32_t minv = 255, maxv	= 0;
       if(debug) {
       for (size_t j = 0; j < valid; ++j) {
-        unsigned v = image[j];
+        uint32_t v = image[j];
         if(v < minv) minv = v;
         if(v > maxv) maxv = v;
       }
+      
       std::cerr << "range min= " << minv << ", max= " << maxv << ", w= "
                 << width << ", h= " << height << ", stride= " << stride
 		<< ", start_pts= " << start_pts << ", timestamp= "
@@ -288,13 +280,13 @@ int main(int argc, char **argv) {
       }
       last_start_pts = start_pts;
 
-      if(width < (unsigned int)min_width || height < (unsigned int)min_height) {
+      if(width < (uint32_t)min_width || height < (uint32_t)min_height) {
 	std::cerr << "WARNING: Image too small " << sub_counter << ", size: " << image_size << " bytes, "
              << width << "x" << height << " pixels, expected at least " << min_width << "x" << min_height << "\n";
         continue;
       }
 
-      if(verbose > 0 and static_cast<unsigned>(timestamp) != start_pts) {
+      if(verbose > 0 and static_cast<uint32_t>(timestamp) != start_pts) {
 	std::cerr << sub_counter << ": time stamp from .idx (" << timestamp
              << ") doesn't match time stamp from .sub ("
              << start_pts << ")\n";
@@ -306,8 +298,7 @@ int main(int argc, char **argv) {
 
       tess_base_api->TesseractRect(image, 1, stride, 0, 0, width, height);
       char *text = tess_base_api->GetUTF8Text();
-
-      if(not text) {
+      if(!text) {
 	std::cerr << "ERROR: OCR failed for " << sub_counter << '\n';
         char const errormsg[] = "VobSub2SRT ERROR: OCR failure!";
         // using raw memory is evil but that's the way Tesseract works
@@ -330,7 +321,7 @@ int main(int argc, char **argv) {
   }
 
   // write the file, fixing end_pts when needed
-  for(unsigned i = 0; i < conv_subs.size(); ++i) {
+  for(uint32_t i = 0; i < conv_subs.size(); ++i) {
     if(conv_subs[i].end_pts == UINT_MAX && i+1 < conv_subs.size())
       conv_subs[i].end_pts = conv_subs[i+1].start_pts;
 
@@ -342,8 +333,8 @@ int main(int argc, char **argv) {
   }
 
   tess_base_api->End();
-  //delete[];
-  ::fclose(srtout);
+  //  delete[]tess_base_api;
+  std::fclose(srtout);
   std::cout << "Wrote Subtitles to '" << srt_filename << "'\n";
 }
   vobsub_close(vob);
