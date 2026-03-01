@@ -98,14 +98,10 @@ void dump_pgm(std::string const &filename, unsigned counter, unsigned width, uns
 }
 }
 
-//#ifdef CONFIG_TESSERACT_NAMESPACE
 using namespace tesseract;
-//#endif
 
 #define TESSERACT_DEFAULT_PATH "<builtin default>"
-//#ifndef TESSERACT_DATA_PATH
 #define TESSERACT_DATA_PATH TESSERACT_DEFAULT_PATH
-//#endif
 
 int main(int argc, char **argv) {
   bool dump_images = false;
@@ -155,6 +151,11 @@ int main(int argc, char **argv) {
   // Set Y threshold from command-line arg only if given
   if (y_threshold) {
     std::cout << "Using Y palette threshold: " << y_threshold << "\n";
+  }
+
+  // Warn if no ifo file supplied
+  if(ifo_file.empty()) {
+    std::cout << "WARNING: No .ifo file supplied. Text/image dump may be blank.\n";
   }
 
   // Open the sub/idx subtitles
@@ -224,8 +225,6 @@ int main(int argc, char **argv) {
   std::string tess_path = tesseract_data_path.c_str();
   if (!tesseract_data_path.empty()) {
     tess_path = tesseract_data_path.c_str();
-  } else {
-	  tess_path = nullptr;
   }
 
 //#ifdef CONFIG_TESSERACT_NAMESPACE
@@ -269,7 +268,6 @@ int main(int argc, char **argv) {
       size_t image_size;
       unsigned width, height, stride, start_pts, end_pts;
       spudec_get_data(spu, &image, &image_size, &width, &height, &stride, &start_pts, &end_pts);
-            /* DEBUG CODE */
       const size_t valid = (size_t)stride * height;
       unsigned minv = 255, maxv	= 0;
       if(debug) {
@@ -278,12 +276,10 @@ int main(int argc, char **argv) {
         if(v < minv) minv = v;
         if(v > maxv) maxv = v;
       }
-      
       std::cerr << "range min= " << minv << ", max= " << maxv << ", w= "
                 << width << ", h= " << height << ", stride= " << stride
 		<< ", start_pts= " << start_pts << ", timestamp= "
 		<< timestamp << ", image= " << (const void*)image << "\n";
-	/* END DEBUG CODE */
       }
       // skip this packet if it is another packet of a subtitle that
       // was decoded from multiple mpeg packets.
@@ -308,12 +304,9 @@ int main(int argc, char **argv) {
         dump_pgm(subname, sub_counter, width, height, stride, image, image_size);
       }
 
-//#ifdef CONFIG_TESSERACT_NAMESPACE
       tess_base_api->TesseractRect(image, 1, stride, 0, 0, width, height);
       char *text = tess_base_api->GetUTF8Text();
-/*#else
-      char *text = TessBaseAPI::TesseractRect(image, 1, stride, 0, 0, width, height);
-#endif*/
+
       if(not text) {
 	std::cerr << "ERROR: OCR failed for " << sub_counter << '\n';
         char const errormsg[] = "VobSub2SRT ERROR: OCR failure!";
@@ -348,13 +341,8 @@ int main(int argc, char **argv) {
     conv_subs[i].text = 0x0;
   }
 
-//#ifdef CONFIG_TESSERACT_NAMESPACE
   tess_base_api->End();
   //delete[];
-/*#else
-  TessBaseAPI::End();
-#endif*/
-
   ::fclose(srtout);
   std::cout << "Wrote Subtitles to '" << srt_filename << "'\n";
 }
