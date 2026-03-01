@@ -12,9 +12,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - uses: actions/checkout@v4
     - name: install-deps
       run: apt install tesseract-ocr-dev tesseract-ocr-eng libtiff5-dev libjpeg-dev libpng-dev libwebp-dev
-    - uses: actions/checkout@v4
     - name: configure
       run: ./configure
     - name: make
