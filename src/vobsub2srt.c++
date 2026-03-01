@@ -142,7 +142,8 @@ int main(int argc, char **argv) {
       add_option("min-height", min_height, "Minimum height in pixels to consider a subpicture for OCR (Default: 1)").
       add_unnamed(subname, "subname", "name of the subtitle files WITHOUT .idx/.sub ending! (REQUIRED)");
     if(not opts.parse_cmd(argc, argv) or subname.empty()) {
-      return 1;
+		std::cout << "Please provide a subtitle name, and consult --help.\n";
+      return 0;
     }
   }
 
