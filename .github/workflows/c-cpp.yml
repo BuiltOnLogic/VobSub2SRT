@@ -13,6 +13,10 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+    - name: switch-mirror
+      run: sudo sed -i 's|mirror+file://etc/apt-mirrors.txt|http://archive.ubuntu.org/ubuntu|g' /etc/apt/sources.list
+    - name: update-apt
+      run: sudo apt update
     - name: install-deps
       run: sudo apt install libtesseract-dev tesseract-ocr-eng libtiff5-dev libjpeg-dev libpng-dev libwebp-dev -y
     - name: configure
