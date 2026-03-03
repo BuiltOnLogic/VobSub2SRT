@@ -45,10 +45,10 @@ typedef void* spu_t;
 
 // helper struct for caching and fixing end_pts in some cases
 struct sub_text_t {
-  sub_text_t(uint32_t start_pts, uint32_t end_pts, char const *text)
+  sub_text_t(unsigned start_pts, unsigned end_pts, char const *text)
     : start_pts(start_pts), end_pts(end_pts), text(text)
   { }
-  uint32_t start_pts, end_pts;
+  unsigned start_pts, end_pts;
   char const *text;
 };
 
@@ -59,15 +59,13 @@ struct sub_text_t {
  */
 
 std::string pts2srt(unsigned pts) {
-  uint32_t ms = pts/90u;
-  uint32_t h = ms / (3600u * 1000u);
+  unsigned ms = pts/90u;
+  unsigned h = ms / (3600u * 1000u);
   ms -= h * 3600 * 1000;
-  uint32_t m = ms / (60u * 1000u);
+  unsigned m = ms / (60u * 1000u);
   ms -= m * 60u * 1000u;
-  uint32_t s = ms / 1000u;
+  unsigned s = ms / 1000u;
   ms %= 1000u;
-
-  if(h > 99) h = 99;
 
   std::array<char, 32> buf{};
   std::snprintf(buf.data(), buf.size(), "%02u:%02u:%02u,%03u", h, m, s, ms);
@@ -75,13 +73,13 @@ std::string pts2srt(unsigned pts) {
 }
 
 /// Dumps the image data to <subtitlename>-<subtitleid>.pgm in Netbpm PGM format
-void dump_pgm(std::string const &filename, uint32_t counter, uint32_t width, uint32_t height,
-              uint32_t stride, unsigned char const *image, size_t image_size) {
+void dump_pgm(std::string const &filename, unsigned counter, unsigned width, unsigned height,
+              unsigned stride, unsigned char const *image, size_t image_size) {
   (void)image_size;
 
   char buf[500];
   ::snprintf(buf, sizeof(buf), "%s-%04u.pgm", filename.c_str(), counter);
-  FILE *pgm = std::fopen(buf, "wb");
+  FILE *pgm = ::fopen(buf, "wb");
   if(!pgm) {
     std::cerr << "Image decode failure. Count: " << counter << "\n";
     return;
@@ -91,11 +89,11 @@ void dump_pgm(std::string const &filename, uint32_t counter, uint32_t width, uin
       ::fclose(pgm);
       return;
     } else {
-      std::fprintf(pgm, "P5\n%u %u %u\n", width, height, 255u);
+      ::fprintf(pgm, "P5\n%u %u %u\n", width, height, 255u);
     for(unsigned i = 0; i < height; ++i) {
-      std::fwrite(image + (size_t)i * stride, 1, width, pgm);
+      ::fwrite(image + (size_t)i * stride, 1, width, pgm);
     }
-    std::fclose(pgm);
+    ::fclose(pgm);
   }
 }
 }
@@ -121,7 +119,7 @@ int main(int argc, char **argv) {
   int min_width = 9;
   int min_height = 1;
 
-  {
+  
     /************************************************************************************
      * Any option added here should be added to doc/vobsub2srt.1 and doc/completion.sh! *
      ************************************************************************************/
@@ -130,7 +128,7 @@ int main(int argc, char **argv) {
       add_option("dump-images", dump_images, "dump subtitles as image files (<subname>-<number>.pgm).").
       add_option("verbose", verb, "extra verbosity.").
       add_option("debug", debug, "\tdebugging information.").
-      add_option("ifo", ifo_file, "name of the ifo file. default: tries to open <subname>.ifo.\n\t\t\tifo file is required in most, if not all cases!").
+      add_option("ifo", ifo_file, "name of the ifo file. default: tries to open <subname>.ifo.\n\t\t\tifo file is required in most cases!").
       add_option("lang", lang, "language to select", 'l').
       add_option("langlist", list_languages, "list languages and exit").
       add_option("index", index, "subtitle index", 'i').
@@ -141,11 +139,14 @@ int main(int argc, char **argv) {
       add_option("min-width", min_width, "Minimum width in pixels to consider a subpicture for OCR (Default: 9)").
       add_option("min-height", min_height, "Minimum height in pixels to consider a subpicture for OCR (Default: 1)").
       add_unnamed(subname, "subname", "name of the subtitle files WITHOUT .idx/.sub ending! (REQUIRED)");
-    if(not opts.parse_cmd(argc, argv) or subname.empty()) {
-		std::cout << "Please provide a subtitle name, and consult --help.\n";
-      return 0;
+    if(!opts.parse_cmd(argc, argv)) {
+	return 0;
+      }
+      else {
+	if (subname.empty()) {
+	  std::cout << "No subtitle specified. Please consult 'vobsub2srt --help'\n";
+	  return 2;
     }
-  }
 
   // Init the mplayer part
   verbose = verb; // mplayer verbose level
@@ -157,12 +158,13 @@ int main(int argc, char **argv) {
   }
 
   // Open the sub/idx subtitles
+  if(!subname.empty()) {
   spu_t spu;
   vob_t vob = vobsub_open(subname.c_str(), ifo_file.empty() ? 0x0 : ifo_file.c_str(), 1, y_threshold, &spu);
   if(debug) {
   std::cerr << "spu ptr = " << spu << "\n";
   }
-  if(not vob or vobsub_get_indexes_count(vob) == 0) {
+  if(!vob or vobsub_get_indexes_count(vob) == 0) {
     std::cerr << "Couldn't open VobSub files '" << subname << ".idx/.sub'\n";
     return 1;
   } else {
@@ -179,35 +181,34 @@ int main(int argc, char **argv) {
 
   // Handle stream Ids and language
 
-  if(not lang.empty() and index >= 0) {
+  if(!lang.empty() and index >= 0) {
     std::cerr << "Setting both lang and index not supported.\n";
     return 1;
   }
-
+  }
   // default english
   char const *tess_lang = tess_lang_user.empty() ? "eng" : tess_lang_user.c_str();
   if(!lang.empty()) {
     if(vobsub_set_from_lang(vob, lang.c_str()) < 0) {
       std::cerr << "No matching language for '" << lang << "' found! (Trying to use default)\n";
-    }
-    else if(tess_lang_user.empty()) {
+    } else {
+      if(tess_lang_user.empty()) {
       // convert two letter lang code into three letter lang code (required by tesseract)
       char const *const lang3 = iso639_1_to_639_3(lang.c_str());
       if(lang3) {
         tess_lang = lang3;
       }
-    }
-  }
-  else {
+    } else {
     if(index >= 0) {
       if(static_cast<unsigned>(index) >= vobsub_get_indexes_count(vob)) {
-	std::cerr << "Index argument out of range: " << index << " ("
+        cerr << "Index argument out of range: " << index << " ("
              << vobsub_get_indexes_count(vob) << ")\n";
         return 1;
       }
       vobsub_id = index;
     }
-
+    }
+  }
     if(vobsub_id >= 0) { // try to set correct tesseract lang for default stream
       char const *const lang1 = vobsub_get_id(vob, vobsub_id);
       if(lang1 and tess_lang_user.empty()) {
@@ -223,6 +224,8 @@ int main(int argc, char **argv) {
   std::string tess_path = tesseract_data_path.c_str();
   if (!tesseract_data_path.empty()) {
     tess_path = tesseract_data_path.c_str();
+  } else {
+	  tess_path = nullptr;
   }
 
 	tesseract::TessBaseAPI *tess_base_api = new tesseract::TessBaseAPI();
@@ -231,27 +234,25 @@ int main(int argc, char **argv) {
     std::cerr << "Failed to initialize tesseract (OCR).\n";
     return 1;
   } else {
-  
-//  tess_base_api->Init(tess_path, tess_lang, false); // TODO params
-  if(!blacklist.empty()) {
+  //  tess_base_api->Init(tess_path, tess_lang);
+  if(not blacklist.empty()) {
     tess_base_api->SetVariable("tessedit_char_blacklist", blacklist.c_str());
   }
-
-
+  
   // Open srt output file
   string const srt_filename = subname + ".srt";
-  FILE *srtout = std::fopen(srt_filename.c_str(), "w");
+  FILE *srtout = fopen(srt_filename.c_str(), "w");
   if(!srtout) {
     std::cerr << "Could not open .srt file\n";
     return 1;
   }
-
+  
   // Read subtitles and convert
   void *packet;
   int timestamp; // pts100
   int len;
-  unsigned last_start_pts = 0;
-  unsigned sub_counter = 1;
+  uint32_t last_start_pts = 0;
+  uint32_t sub_counter = 1;
   vector<sub_text_t> conv_subs;
   conv_subs.reserve(200); // TODO better estimate
   while( (len = vobsub_get_next_packet(vob, &packet, &timestamp)) > 0) {
@@ -270,7 +271,6 @@ int main(int argc, char **argv) {
         if(v < minv) minv = v;
         if(v > maxv) maxv = v;
       }
-      
       std::cerr << "range min= " << minv << ", max= " << maxv << ", w= "
                 << width << ", h= " << height << ", stride= " << stride
 		<< ", start_pts= " << start_pts << ", timestamp= "
@@ -289,7 +289,7 @@ int main(int argc, char **argv) {
         continue;
       }
 
-      if(verbose > 0 and static_cast<uint32_t>(timestamp) != start_pts) {
+      if(verbose > 0 and static_cast<unsigned>(timestamp) != start_pts) {
 	std::cerr << sub_counter << ": time stamp from .idx (" << timestamp
              << ") doesn't match time stamp from .sub ("
              << start_pts << ")\n";
@@ -301,6 +301,7 @@ int main(int argc, char **argv) {
 
       tess_base_api->TesseractRect(image, 1, stride, 0, 0, width, height);
       char *text = tess_base_api->GetUTF8Text();
+
       if(!text) {
 	std::cerr << "ERROR: OCR failed for " << sub_counter << '\n';
         char const errormsg[] = "VobSub2SRT ERROR: OCR failure!";
@@ -336,11 +337,17 @@ int main(int argc, char **argv) {
   }
 
   tess_base_api->End();
-  //  delete[]tess_base_api;
-  std::fclose(srtout);
-  std::cout << "Wrote Subtitles to '" << srt_filename << "'\n";
-}
+  //delete[];
+  if(!subname.empty()) {
+    std::fclose(srtout);
+    std::cout << "Wrote subtitles to '" << srt_filename <<"'\n";
+  }
+  if(ifo_file.empty()) {
+    std::cerr << "No .ifo file provided. Subtitles may look wrong. Consult 'vobsub2srt --help'.\n";
+  }
+  }
   vobsub_close(vob);
   spudec_free(spu);
-}
+  }
+      }
 }

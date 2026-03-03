@@ -6,8 +6,6 @@ set(mplayer_sources
   mp_msg.h
   spudec.c
   spudec.h
-  unrar_exec.c
-  unrar_exec.h
   vobsub.c
   vobsub.h
   )

@@ -33,12 +33,12 @@
 #include <sys/types.h>
 
 //#include "config.h"
-#define CONFIG_UNRAR_EXEC 1 // moved from config.h
+//#define CONFIG_UNRAR_EXEC 1 // moved from config.h
 //#include "mpcommon.h"
 #include "vobsub.h"
 #include "spudec.h"
 #include "mp_msg.h"
-#include "unrar_exec.h"
+//#include "unrar_exec.h"
 
 // Record the original -vobsubid set by commandline, since vobsub_id will be
 // overridden if slang match any of vobsub streams.
