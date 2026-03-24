@@ -154,7 +154,7 @@ in your .idx file to this, a plain white-on-black palette for better accuracy.
 	#+END_SRC
 
 For bug reports please run =vobsub2srt= with the =--verbose= option set to 2,
-and copy and paste the full output to the bug report.
+and copy and paste the first 50~ lines to the bug report.
 
 * To Do
 - implement preprocessing (first step scaling. Code available in =spudec.c=)
