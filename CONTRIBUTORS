@@ -1,6 +1,7 @@
 Most code is from the MPlayer project.
-- Chris Ogloff <chris.ogloff@gmail.com> Added memory safety, tested with Valgrind
-  across distributions. Updated to GNU++11 and new Tesseract API calls.
+- Chris Ogloff <chris.ogloff@gmail.com> Mar. 2026: added memory safety,
+  modern Tesseract calls, validated with Valgrind, separated MPlayer verbosity
+  from displaying realtime subtitle decoding, ensured compatibility across Linux distributions.
 - Armin Häberling <armin.aha@gmail.com> wrote a patch to fix an issue with
   multiple instances of the same subtitle in result file (21af426)
 - James Harris <jimmy@jamesharris.org> wrote the formula for Homebrew (54f311d6)
