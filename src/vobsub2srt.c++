@@ -28,10 +28,11 @@
 
 // libpng
 #ifdef __has_include(<png.h>) /** some systems do not use a subdir for png */
+	#if __has_include(<png.h>)
 	#include <png.h>
-	#elif
-	#ifdef __has_include(<libpng/png.h>)
+	#elif __has_include(<libpng/png.h>)
 	#include <libpng/png.h>
+	#endif
 #endif
 
 // Builtins/standard libs
