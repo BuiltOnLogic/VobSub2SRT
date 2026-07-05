@@ -27,7 +27,12 @@
 #include <tesseract/baseapi.h>
 
 // libpng
-#include <libpng/png.h>
+#ifdef __has_include(<png.h>) /** some systems do not use a subdir for png */
+	#include <png.h>
+	#elif
+	#ifdef __has_include(<libpng/png.h>)
+	#include <libpng/png.h>
+#endif
 
 // Builtins/standard libs
 #include <memory>
