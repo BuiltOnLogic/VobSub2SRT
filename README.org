@@ -1,8 +1,8 @@
 # -*- mode:org; mode:auto-fill; fill-column:80; coding:utf-8; tab-width:8; -*-
 VobSub2SRT is a simple command line program to convert =.idx= / =.sub= subtitles
 into =.srt= text subtitles by using OCR.  It is based on code from the
-[[http://www.mplayerhq.hu][MPlayer project]] - a really really great movie player.  Some minor parts are
- copied from [[http://ffmpeg.org/][ffmpeg/avutil]] headers. [[http://code.google.com/p/tesseract-ocr/][Tesseract]] is used as OCR software.
+[[https://www.mplayerhq.hu][MPlayer project]] - a pretty decent movie player.  Some minor parts are
+ copied from [[https://ffmpeg.org/][ffmpeg/avutil]] headers. [[https://code.google.com/p/tesseract-ocr/][Tesseract]] is used as OCR software.
 
 vobsub2srt is released under the GPL3+ license. The MPlayer code included is
 GPL2+ licensed.
@@ -13,7 +13,9 @@ to improve the OCR. You can correct mistakes in the =.srt= files with a text
 editor or a subtitle editor.
 
 ** July 2026
--		Rewrite incoming. Give me a couple weeks to a month. Results are promising
+-		Added conditional libPNG header check inside vobsub2srt.c++ for
+		compatibility with NixOS and others.
+-		MPlayer vobsub.c memory fixes/refactor soon. Results are promising
 		with increased speed and accuracy.
 
 ** Jun 2026
@@ -49,16 +51,25 @@ You also need to install the tesseract data for the languages you want to use.
 	sudo apt-get install tesseract-lang-eng
 #+END_EXAMPLE
 
-Note that support for tesseract 2 is deprecated and may not work in the
-future!
-
 #+BEGIN_EXAMPLE
   ./configure
   make
   sudo make install
 #+END_EXAMPLE
 
-This should install the program vobsub2srt to =/usr/local/bin=.  You can
+Note that support for Tesseract <4 is deprecated.
+
+Building from NixOS (Tested with 26.05):
+#+BEGIN_EXAMPLE
+nix-env -iA nixos.git nixos.gcc nixos.cmake nixos.tesseract nixos.libtiff nixos.libpng nixos.zlib
+git clone https://github.com/csingleplus/VobSub2SRT && cd VobSub2SRT
+cmake -B build
+cmake --build build
+sudo cmake --install build
+#+END_EXAMPLE
+
+This should install the program vobsub2srt to =/usr/local/bin=.
+Run configure with -DCMAKE_INSTALL_PREFIX=<path> for elsewhere. You can
 uninstall vobsub2srt with =sudo make uninstall=.
 
 ** Static binary
@@ -69,7 +80,7 @@ static library files for tesseract, libtill, libavutils, and for their
 dependencies as well.  On Ubuntu 12.04 the static libraries are only included in
 the dev packages! You probably also need the Gold linker.
 
-For Ubuntu 12.04 you need the following extra packages:
+For Ubuntu 12.04 you need the following extra packages: (but this branch likely does not work with such an old distro.)
 
 #+BEGIN_EXAMPLE
   sudo apt-get install libleptonica-dev libpng-dev libwebp-dev libgif-dev zlib1g-dev libjpeg-dev binutils-gold
@@ -80,50 +91,9 @@ your version of leptonica has is a good starting point. You can do this by
 running =ldd /usr/lib/liblept.so= (or whatever the path to leptonica is on your
 system). Add those dependencies to =CMakeModules/FindTesseract.cmake=.
 
-** Ubuntu PPA and .deb packages
-* NOTE: This PPA is no longer maintained and it is recommended to build from current source.
-	
-I have created a [[https://launchpad.net/~ruediger-c-plusplus/+archive/vobsub2srt][PPA (Personal Package Archive)]] to make installation on
-Ubuntu easy.  Simply add the PPA to your apt-get sources and run an update and
-you can install the =vobsub2srt= package:
-
-#+BEGIN_EXAMPLE
-  sudo add-apt-repository ppa:ruediger-c-plusplus/vobsub2srt
-  sudo apt-get update
-  sudo apt-get install vobsub2srt
-#+END_EXAMPLE
-
 *** .deb (Debian/Ubuntu)
 You can build a *.deb package (Debian/Ubuntu) with =make package=.  The package
 is created in the =build= directory.
-
-You can also create a source package and upload it to your own PPA by using the
-=UploadPPA.cmake=. But this is only recommended for people experienced with
-cmake and creating Debian packages.
-
-
-** This is also no longer maintained.
-I am aware of a fork with a fixed formula, so feel free to seek that out, otherwise just build from source.
-
-
-** Homebrew
-Vobsub2srt contains a formula for [[http://mxcl.github.com/homebrew/][Homebrew]] (a package manager for OS X).  It can
-be installed by using the following commands:
-
-#+BEGIN_EXAMPLE
-  brew install --with-all-languages tesseract
-  brew install --HEAD https://github.com/csingleplus/VobSub2SRT/raw/master/packaging/vobsub2srt.rb
-#+END_EXAMPLE
-
-
-** Gentoo ebuild
-You run Gentoo. I doubt you need further instructions for this.
-
-
-** Arch AUR
-There also exist a [[https://wiki.archlinux.org/index.php/PKGBUILD][PKGBUILD]] file for Arch Linux in AUR:
-https://aur.archlinux.org/packages/vobsub2srt-git
-
 
 
 * Usage
