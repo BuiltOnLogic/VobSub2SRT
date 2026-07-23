@@ -13,10 +13,16 @@ to improve the OCR. You can correct mistakes in the =.srt= files with a text
 editor or a subtitle editor.
 
 ** July 2026
+-		I have been working on a completely new codebase for better support across systems
+		and multiple formats. This may take some time, as I am learning FFmpeg's API.
+		When it is ready, it will have its own repository separate from this. Possible
+		AArch64 (or more like GCC 12, since that is the main issue) support as well after
+		acquiring a PinePhone. That goes for this project too.
+
 -		Added conditional libPNG header check inside vobsub2srt.c++ for
 		compatibility with NixOS and others.
 -		MPlayer vobsub.c memory fixes/refactor soon. Results are promising
-		with increased speed and accuracy.
+		with increased speed and accuracy. (on hiatus)
 
 ** Jun 2026
 -       PNG export added, cast vobsubid to avoid left shift.
