@@ -44,7 +44,6 @@
 #include <array>
 #include <iostream>
 #include <fstream>
-#include <format>
 #include <string>
 #include <cstdio>
 #include <vector>
